@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RatingActivity"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#D39595">
+
+
+
+
+    <TextView
+        android:id="@+id/txtWelcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="30sp"
+        android:layout_marginBottom="60dp"
+        android:padding="20sp"
+        android:text="Rating "
+        android:textColor="#FDFDFC"
+        android:textSize="40sp"
+        android:textStyle="bold" />
+
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="300sp"
+        android:id="@+id/ratingCardView"
+        android:layout_height="100sp"
+        android:layout_marginTop="100sp"
+        android:layout_below="@id/txtWelcome"
+        android:layout_centerHorizontal="true">
+
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:id="@+id/rating"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:background="@color/white"
+            android:stepSize="0.5"
+            android:layout_gravity="center"
+            >
+
+        </RatingBar>
+
+    </androidx.cardview.widget.CardView>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/submitRating"
+        android:layout_below="@id/ratingCardView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40sp"
+        android:text="Submit"   >
+    </Button>
+
+
+    <TextView
+        android:id="@+id/currRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/submitRating"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="50sp"
+        android:layout_marginTop="50sp"
+        android:layout_marginEnd="50sp"
+        android:layout_marginBottom="50sp"
+        android:text="Current Rating : "
+        android:textSize="30sp"
+        android:textStyle="bold">
+
+    </TextView>
+
+
+</RelativeLayout>
