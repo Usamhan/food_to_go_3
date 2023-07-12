@@ -14,7 +14,7 @@ public class MapActivity extends AppCompatActivity {
 
         WebView webView = findViewById(R.id.webview);
         webView.getSettings().setJavaScriptEnabled(true);
-// Add any additional settings if required
+        // Add any additional settings if required
 
         //webView.loadUrl("https://www.google.com/maps"); // Load the map URL
 

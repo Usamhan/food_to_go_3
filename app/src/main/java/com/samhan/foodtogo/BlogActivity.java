@@ -16,6 +16,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,11 +58,26 @@ public class BlogActivity extends AppCompatActivity {
 
     private static final int PReqCode = 2 ;
     private static final int REQUESCODE = 2 ;
+
+    //for pagination
+    Integer pageNumber=1;
+    Integer postStartNum=1,postEndNum=3;
+    Button btnPreviousPage,btnNextPage;
+    TextView tv_pageNo;
+    Post post;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blog);
 
+        //for pagination
+        btnPreviousPage=findViewById(R.id.previousButton);
+        btnNextPage=findViewById(R.id.nextButton);
+        tv_pageNo=findViewById(R.id.pageNo);
+        pageNumber = Integer.parseInt(tv_pageNo.getText().toString()) ;
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -70,31 +86,62 @@ public class BlogActivity extends AppCompatActivity {
         postRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
+        makeList();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("Posts");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        btnPreviousPage.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                postList =new ArrayList<>();
-
-                for(DataSnapshot postsnap: snapshot.getChildren()){
-
-                    Post post=postsnap.getValue(Post.class);
-//                    post.setPostKey(snapshot.getKey());
-                    postList.add(post);
+            public void onClick(View view) {
+                if(pageNumber==1) {
+                    Toast.makeText(getApplicationContext(),"No previous Page Found !",Toast.LENGTH_SHORT).show();
                 }
-
-                Collections.reverse(postList);
-
-                postAdapter=new PostAdapter(getApplicationContext(),postList);
-                postRecyclerView.setAdapter(postAdapter);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+                else {
+                    pageNumber-- ;
+                    String s = Integer.toString(pageNumber) ;
+                    tv_pageNo.setText(s);
+                    postEndNum = pageNumber*5 ;
+                    postStartNum = pageNumber - 4 ;
+                    makeList();
+                }
             }
         });
+
+        btnNextPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pageNumber ++ ;
+                String s = Integer.toString(pageNumber) ;
+                postEndNum = pageNumber*5 ;
+                postStartNum = postEndNum - 4 ;
+                tv_pageNo.setText(s);
+                makeList() ;
+            }
+        });
+        
+
+//        databaseReference = FirebaseDatabase.getInstance().getReference("Posts");
+//        databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                postList =new ArrayList<>();
+//
+//                for(DataSnapshot postsnap: snapshot.getChildren()){
+//
+//                    Post post=postsnap.getValue(Post.class);
+////                    post.setPostKey(snapshot.getKey());
+//                    postList.add(post);
+//                }
+//
+//                Collections.reverse(postList);
+//
+//                postAdapter=new PostAdapter(getApplicationContext(),postList);
+//                postRecyclerView.setAdapter(postAdapter);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
 
         fab=findViewById(R.id.btn_addPost);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -109,10 +156,47 @@ public class BlogActivity extends AppCompatActivity {
 
     }
 
+    private void makeList() {
+
+        postRecyclerView.setHasFixedSize(true);
+
+        databaseReference = FirebaseDatabase.getInstance().getReference("Posts");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                postList =new ArrayList<>();
+                ArrayList<Post>  initial = new ArrayList<Post>();
+                for(DataSnapshot postsnap: snapshot.getChildren()){
+
+                    Post post=postsnap.getValue(Post.class);
+//                    post.setPostKey(snapshot.getKey());
+                    initial.add(post);
+                }
+
+                Collections.reverse(initial);
+
+                int cnt = 0 ;
+                for (Post postsnap: initial) {
+                    Post post = postsnap ;
+                    if(cnt>=postStartNum-1 && cnt<postEndNum) {
+                        postList.add(post) ;
+                    }
+                    cnt ++ ;
+                }
+
+                postAdapter=new PostAdapter(getApplicationContext(),postList);
+                postRecyclerView.setAdapter(postAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 
 
-
-            private void setupPopupImageClick() {
+    private void setupPopupImageClick() {
 
 
         popupPostImage.setOnClickListener(new View.OnClickListener() {

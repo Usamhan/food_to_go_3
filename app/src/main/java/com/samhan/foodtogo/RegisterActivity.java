@@ -16,10 +16,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -85,18 +88,34 @@ public class RegisterActivity extends AppCompatActivity {
                                 Toast.makeText(RegisterActivity.this, "username already taken", Toast.LENGTH_SHORT).show();
                             }
                             else{
-                                firebaseAuth.createUserWithEmailAndPassword(mail, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                firebaseAuth.createUserWithEmailAndPassword(mail,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                     @Override
-                                    public void onSuccess(AuthResult authResult) {
-                                        // Toast.makeText(RegisterActivity.this, "Successfully added", Toast.LENGTH_SHORT).show();
-                                        Toast.makeText(RegisterActivity.this, "Successfully added", Toast.LENGTH_SHORT).show();
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if(task.isSuccessful()){
+                                            FirebaseUser user=firebaseAuth.getCurrentUser();
+                                            if(user!=null){
+                                                user.sendEmailVerification();
+                                                if(user.sendEmailVerification().isSuccessful()){
+                                                    Toast.makeText(RegisterActivity.this, "Successfully added", Toast.LENGTH_SHORT).show();
+                                                    Intent intent=new Intent(getApplicationContext(),LogInActivity.class);
+                                                    startActivity(intent);
+                                                }
+                                            }
+                                        }
                                     }
                                 });
+//                                firebaseAuth.createUserWithEmailAndPassword(mail, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+//                                    @Override
+//                                    public void onSuccess(AuthResult authResult) {
+//                                        // Toast.makeText(RegisterActivity.this, "Successfully added", Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(RegisterActivity.this, "Successfully added", Toast.LENGTH_SHORT).show();
+//                                    }
+//                                }).addOnFailureListener(new OnFailureListener() {
+//                                    @Override
+//                                    public void onFailure(@NonNull Exception e) {
+//                                        Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+//                                    }
+//                                });
 
                                 DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
                                 String userId = firebaseAuth.getCurrentUser().getUid();

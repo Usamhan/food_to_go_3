@@ -23,6 +23,37 @@
         android:layout_marginBottom="15dp"
         android:src="@drawable/ic_create_black_24dp"/>
 
+    <Button
+        android:id="@+id/previousButton"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="70dp"
+        android:textAllCaps="false"
+        android:text="Previous" />
+
+    <TextView
+        android:layout_width="70dp"
+        android:layout_height="50dp"
+        android:text="1"
+        android:layout_alignParentBottom="true"
+        android:textStyle="bold"
+        android:id="@+id/pageNo"
+        android:gravity="center"
+        android:textSize="40dp"
+        android:layout_toRightOf="@+id/previousButton"
+        />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:text="Next"
+        android:layout_toRightOf="@id/pageNo"
+        android:id="@+id/nextButton"
+        />
+
 
 
 </RelativeLayout>

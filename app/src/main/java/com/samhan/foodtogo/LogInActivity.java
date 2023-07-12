@@ -54,6 +54,7 @@ public class LogInActivity extends AppCompatActivity {
 
                 if(!mail.equals("") && !password.equals(""))
                 {
+
                     firebaseAuth.signInWithEmailAndPassword(mail,password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
