@@ -97,7 +97,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                 user.sendEmailVerification();
                                                 if(user.sendEmailVerification().isSuccessful()){
                                                     Toast.makeText(RegisterActivity.this, "Successfully added", Toast.LENGTH_SHORT).show();
-                                                    Intent intent=new Intent(getApplicationContext(),LogInActivity.class);
+                                                    Intent intent=new Intent(getApplicationContext(),BlogActivity.class);
                                                     startActivity(intent);
                                                 }
                                             }

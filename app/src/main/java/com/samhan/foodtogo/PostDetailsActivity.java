@@ -31,10 +31,11 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class PostDetailsActivity extends AppCompatActivity {
 
-    ImageView imgPost,imgUserPost;
+    ImageView imgPost,imgUserPost,like;
     TextView txtPostDesc,txtPostDateName , txtPostTitle;
     EditText editTextComment;
     Button btnAddComment;
@@ -49,9 +50,10 @@ public class PostDetailsActivity extends AppCompatActivity {
     FirebaseUser currentUser;
     FirebaseDatabase firebaseDatabase;
 
-    Button like;
+
     TextView likeCnt;
 
+    Boolean testClick;
     List<Post> mData;
 
     @Override
@@ -78,34 +80,39 @@ public class PostDetailsActivity extends AppCompatActivity {
         currentUser=firebaseAuth.getCurrentUser();
         firebaseDatabase=FirebaseDatabase.getInstance();
 
+        postKey=getIntent().getExtras().getString("postKey");
+        String userid = firebaseAuth.getCurrentUser().getUid() ;
+
+        GetLikeCount(postKey,userid);
+        AlreadyLiked(postKey,userid);
+
         Post model=new Post();
 
+        DatabaseReference likeRef = FirebaseDatabase.getInstance().getReference("LIKE");
         like.setOnClickListener(new View.OnClickListener() {
-//            @Override
+            @Override
             public void onClick(View view) {
-                firebaseDatabase.getInstance().getReference("Posts")
+                testClick = true;
 
-                        .child(postKey)
-                        .child("Likes")
-                        .child(FirebaseAuth.getInstance().getUid())
-                        .setValue(true).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                firebaseDatabase.getInstance().getReference("Posts")
+                likeRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                                        .child(postKey)
-                                        .child("PostLike")
-                                        .setValue(model.getPostLike()+1).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                like.setBackgroundColor(Color.RED);
-
-
-                                            }
-                                        });
-
+                        if(testClick == true){
+                            if(snapshot.child(postKey).hasChild(userid)){
+                                likeRef.child(postKey).child(userid).removeValue();
+                                testClick = false;
                             }
-                        });
+                            else{
+                                likeRef.child(postKey).child(userid).setValue(true);
+                                testClick = false;
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
             }
         });
 
@@ -155,7 +162,7 @@ public class PostDetailsActivity extends AppCompatActivity {
 
 
 
-        postKey=getIntent().getExtras().getString("postKey");
+
 
         String date=timestampToString(getIntent().getExtras().getLong("postDate"));
         txtPostDateName.setText(date);
@@ -198,5 +205,51 @@ public class PostDetailsActivity extends AppCompatActivity {
         calendar.setTimeInMillis(time);
         String date= DateFormat.format("dd-MM-yyyy",calendar).toString();
         return date;
+    }
+
+    private void AlreadyLiked(final String postkey, final String userid){
+        DatabaseReference databaseReference = firebaseDatabase.getReference("LIKE");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.child(postkey).hasChild(userid)){
+                    int likecnt = (int)snapshot.child(postkey).getChildrenCount();
+                    likeCnt.setText(String.valueOf(likecnt));
+                    like.setImageResource(R.drawable.afterlike);
+
+                }
+                else{
+                    int cnt = (int)snapshot.child(postkey).getChildrenCount();
+                    likeCnt.setText(String.valueOf(cnt));
+                    like.setImageResource(R.drawable.beforelike);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private  void GetLikeCount(final String postkey, final String userid) {
+
+        DatabaseReference databaseReference = firebaseDatabase.getReference("LIKE");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Integer cnt = 0 ;
+                for (DataSnapshot postsnap: dataSnapshot.getChildren()) {
+                    Like l1 = postsnap.getValue(Like.class);
+                    //Toast.makeText(PostDetails_Page.this,postID,Toast.LENGTH_SHORT).show();
+                    if(Objects.equals(postKey,l1.getPostID()) ) {
+                        cnt ++ ;
+                        Toast.makeText(PostDetailsActivity.this," " + " hahaha " + " " ,Toast.LENGTH_SHORT).show() ;
+                    }
+                }
+                likeCnt.setText(Integer.toString(cnt));
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 }

@@ -181,19 +181,19 @@
             android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/post_detail_desc"
             app:layout_constraintEnd_toStartOf="@+id/post_detail_date_name"
-            app:layout_constraintHorizontal_bias="0.75"
+            app:layout_constraintHorizontal_bias="0.25"
             app:layout_constraintStart_toEndOf="@+id/btn_like"
             app:layout_constraintTop_toBottomOf="@+id/view"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="0.0" />
 
-        <Button
+        <ImageView
             android:id="@+id/btn_like"
-            android:layout_width="108dp"
-            android:layout_height="41dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginTop="54dp"
+            android:background="@drawable/beforelike"
             android:layout_marginEnd="2dp"
             android:layout_marginBottom="127dp"
-            android:text="LIKE"
             app:layout_constraintBottom_toTopOf="@+id/rv_comment"
             app:layout_constraintEnd_toStartOf="@+id/post_detail_desc"
             app:layout_constraintHorizontal_bias="0.0"
