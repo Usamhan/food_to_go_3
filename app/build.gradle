@@ -1,7 +1,13 @@
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
+
+    //for graphql
+
 }
+
+//for graphql
+
 
 android {
     namespace 'com.samhan.foodtogo'
@@ -82,5 +88,8 @@ dependencies {
 
     // Import tflite dependencies
     implementation 'org.tensorflow:tensorflow-lite:0.0.0-nightly-SNAPSHOT'
+
+    //for graphql
+    
 
 }

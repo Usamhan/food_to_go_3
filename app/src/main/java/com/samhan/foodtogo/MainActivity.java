@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btn_toBlog,btn_toDetection ,btn_toVideo,btn_toMap,btn_toRating;
+    Button btn_toBlog,btn_toDetection ,btn_toVideo,btn_toMap,btn_toRating,btn_toSass;
 
     @Override
 
@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         btn_toVideo=findViewById(R.id.btn_toVideo);
         btn_toMap=findViewById(R.id.btn_toMap);
         btn_toRating=findViewById(R.id.btn_toRating);
+        btn_toSass=findViewById(R.id.btn_toSass);
 
         btn_toDetection.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +65,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(getApplicationContext(), RatingActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btn_toSass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getApplicationContext(), Gsap_SassActivity.class);
                 startActivity(intent);
             }
         });

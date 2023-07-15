@@ -63,6 +63,17 @@
         android:textColor="@color/black"
         android:textStyle="bold" />
 
+    <Button
+        android:id="@+id/btn_toSass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_toRating"
+
+        android:backgroundTint="@color/white"
+        android:text="GSAP SASS"
+        android:textColor="@color/black"
+        android:textStyle="bold" />
+
 
 
 </RelativeLayout>
