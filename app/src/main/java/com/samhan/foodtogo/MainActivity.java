@@ -27,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
         btn_toDetection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent=new Intent(getApplicationContext(), detection_activity.class);
-//                startActivity(intent);
+                Intent intent=new Intent(getApplicationContext(), MachineLearningActivity.class);
+                startActivity(intent);
 
                 Toast.makeText(MainActivity.this, "works ", Toast.LENGTH_SHORT).show();
             }
